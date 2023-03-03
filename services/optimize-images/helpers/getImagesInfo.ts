@@ -1,4 +1,4 @@
-import { isFulfilled } from '../../../utils/isFulfilled.ts'
+import { isFulfilled } from '/utils/isFulfilled.ts'
 import { ImageContentType } from '../consts.ts'
 import { getFileNameInfoFrom } from './getFileNameInfoFrom.ts'
 

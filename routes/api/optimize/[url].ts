@@ -1,5 +1,5 @@
 import { HandlerContext } from '$fresh/server.ts'
-import { optimizeStaticImagesFrom } from '../../../services/optimize-images/optimize-images.ts'
+import { optimizeStaticImagesFrom } from '/services/optimize-images/optimize-images.ts'
 
 export const handler = async (_req: Request, _ctx: HandlerContext): Promise<Response> => {
     try {

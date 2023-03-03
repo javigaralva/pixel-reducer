@@ -1,5 +1,5 @@
 import { asset, Head } from '$fresh/runtime.ts'
-import App from '../islands/App.tsx'
+import App from "/islands/App.tsx"
 
 export default function Home() {
     return (

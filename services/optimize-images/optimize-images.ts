@@ -1,6 +1,6 @@
 import { loadImage } from 'https://deno.land/x/canvas@v1.4.1/mod.ts'
-import { type OptimizeResponse } from '../../types.d.ts'
-import { isFulfilled } from '../../utils/isFulfilled.ts'
+import { type OptimizeResponse } from '/types.d.ts'
+import { isFulfilled } from '/utils/isFulfilled.ts'
 import { CLOUDINARY_OPTIMIZED_URL, CLOUDINARY_THUMBNAIL_URL } from './consts.ts'
 import { getImagesInfo, type ImageInfo } from './helpers/getImagesInfo.ts'
 import { getImagesUrls } from './helpers/getImagesUrls.ts'

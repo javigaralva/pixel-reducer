@@ -1,7 +1,7 @@
 import { useState } from 'preact/hooks'
-import { type Entry, type OptimizeResponse } from '../types.d.ts'
-import { formatBytes } from '../utils/formatBytes.ts'
-import { isValidUrl } from '../utils/isValidUrl.ts'
+import { type Entry, type OptimizeResponse } from '/types.d.ts'
+import { formatBytes } from '/utils/formatBytes.ts'
+import { isValidUrl } from '/utils/isValidUrl.ts'
 
 const API_BASE_URL = ''
 const API_OPTIMIZE_URL = `${API_BASE_URL}/api/optimize`

@@ -1,9 +1,9 @@
 import { HandlerContext, Handlers } from '$fresh/server.ts'
 import { BlobWriter, ZipWriter } from 'https://deno.land/x/zipjs@v2.6.75/index.js'
-import { ImageContentType } from '../../services/optimize-images/consts.ts'
-import { getFileNameInfoFrom } from '../../services/optimize-images/helpers/getFileNameInfoFrom.ts'
-import { isOptimizableImage } from '../../services/optimize-images/helpers/isOptimizableImage.ts'
-import { uuid } from '../../utils/uuid.ts'
+import { ImageContentType } from '/services/optimize-images/consts.ts'
+import { getFileNameInfoFrom } from '/services/optimize-images/helpers/getFileNameInfoFrom.ts'
+import { isOptimizableImage } from '/services/optimize-images/helpers/isOptimizableImage.ts'
+import { uuid } from '/utils/uuid.ts'
 
 export const handler: Handlers = {
     POST: async (_req: Request, _ctx: HandlerContext) => {
