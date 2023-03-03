@@ -1,23 +1,23 @@
 import { loadImage } from 'https://deno.land/x/canvas@v1.4.1/mod.ts'
-import { type OptimizeResponse } from '/types.d.ts'
+import { type OptimizedImagesResponse } from '/types.d.ts'
 import { isFulfilled } from '/utils/isFulfilled.ts'
 import { CLOUDINARY_OPTIMIZED_URL, CLOUDINARY_THUMBNAIL_URL } from './consts.ts'
 import { getImagesInfo, type ImageInfo } from './helpers/getImagesInfo.ts'
 import { getImagesUrls } from './helpers/getImagesUrls.ts'
 import { isOptimizableImage } from './helpers/isOptimizableImage.ts'
 
-export async function optimizeStaticImagesFrom({ url }: { url: string }): Promise<OptimizeResponse> {
+export async function optimizeStaticImagesFrom({ url }: { url: string }): Promise<OptimizedImagesResponse> {
     const tInitProcess = Date.now()
 
     const optimizedImages = await getOptimizedImagesFrom(url)
 
-    const entriesToBeOptimized = optimizedImages.filter((data) => data.optimizedSize < data.size)
-    const entriesCannotBeOptimized = optimizedImages.filter((data) => data.optimizedSize > data.size)
+    const imagesOptimized = optimizedImages.filter((data) => data.optimizedSize < data.size)
+    const imagesNotOptimized = optimizedImages.filter((data) => data.optimizedSize > data.size)
 
-    entriesToBeOptimized.sort((a, b) => b.bytesSaved - a.bytesSaved)
+    imagesOptimized.sort((a, b) => b.bytesSaved - a.bytesSaved)
 
-    const totalBytes = entriesToBeOptimized.reduce((acc, curr) => acc + curr.size, 0)
-    const totalBytesOptimized = entriesToBeOptimized.reduce((acc, curr) => acc + curr.optimizedSize, 0)
+    const totalBytes = imagesOptimized.reduce((acc, curr) => acc + curr.size, 0)
+    const totalBytesOptimized = imagesOptimized.reduce((acc, curr) => acc + curr.optimizedSize, 0)
     const totalBytesSaved = totalBytes - totalBytesOptimized
     const totalPercentageSaved = totalBytes > 0 ? totalBytesSaved * 100 / totalBytes : 0
 
@@ -29,8 +29,8 @@ export async function optimizeStaticImagesFrom({ url }: { url: string }): Promis
         totalBytesOptimized,
         totalBytesSaved,
         totalPercentageSaved,
-        entriesToBeOptimized,
-        entriesCannotBeOptimized,
+        imagesOptimized,
+        imagesNotOptimized,
     }
 }
 

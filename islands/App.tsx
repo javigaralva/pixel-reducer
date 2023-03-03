@@ -1,5 +1,5 @@
 import { useState } from 'preact/hooks'
-import { type Entry, type OptimizeResponse } from '/types.d.ts'
+import { type ImageProcessed, type OptimizedImagesResponse } from '/types.d.ts'
 import { formatBytes } from '/utils/formatBytes.ts'
 import { isValidUrl } from '/utils/isValidUrl.ts'
 
@@ -10,7 +10,7 @@ const API_ZIP_URL = `${API_BASE_URL}/api/zip`
 function App() {
     const [urlInput, setUrlInput] = useState('')
     const [isLoading, setIsLoading] = useState(false)
-    const [response, setResponse] = useState<OptimizeResponse | null>(null)
+    const [response, setResponse] = useState<OptimizedImagesResponse | null>(null)
 
     const handleOptimizeImages = () => {
         if (!urlInput) return
@@ -18,7 +18,7 @@ function App() {
         setIsLoading(true)
         fetch(url)
             .then((response) => response.json())
-            .then((json: OptimizeResponse) => {
+            .then((json: OptimizedImagesResponse) => {
                 setResponse(json)
             })
             .catch((response) => {
@@ -32,13 +32,13 @@ function App() {
 
     const handleDownload = () => {
         const responseObj = response
-        if (!responseObj?.entriesToBeOptimized?.length) return
+        if (!responseObj?.imagesOptimized?.length) return
 
         setIsLoading(true)
         fetch(API_ZIP_URL, {
             method: 'POST',
             body: JSON.stringify({
-                urls: responseObj.entriesToBeOptimized.map((entry: {
+                urls: responseObj.imagesOptimized.map((entry: {
                     url: string
                     optimizedUrl: string
                 }) => entry.optimizedUrl),
@@ -75,30 +75,28 @@ function App() {
                 <button onClick={handleOptimizeImages} disabled={isLoading || !isValidUrlInput}>Analyze!</button>
                 {!isLoading &&
                     response &&
-                    response.entriesToBeOptimized.length > 0 &&
+                    response.imagesOptimized.length > 0 &&
                     (
                         <button onClick={handleDownload} disabled={isLoading}>
                             Download All and save {formatBytes(response.totalBytesSaved)}!
                         </button>
                     )}
             </div>
-            {isLoading
-                ? <p>Loading...</p>
-                : ((response?.entriesToBeOptimized.length ?? 0) > 0
-                    ? (
-                        <section className='results'>
-                            <div className='cards-image-container'>
-                                {response?.entriesToBeOptimized.map((entry) => <CardImage entry={entry} />)}
-                            </div>
-                            <pre style={{ textAlign: 'initial' }}>{JSON.stringify(response, null, 2)}</pre>
-                        </section>
-                    )
-                    : null)}
+            {isLoading ? <p>Loading...</p> : ((response?.imagesOptimized.length ?? 0) > 0
+                ? (
+                    <section className='results'>
+                        <div className='cards-image-container'>
+                            {response?.imagesOptimized.map((entry) => <CardImage entry={entry} />)}
+                        </div>
+                        <pre style={{ textAlign: 'initial' }}>{JSON.stringify(response, null, 2)}</pre>
+                    </section>
+                )
+                : null)}
         </div>
     )
 }
 
-function CardImage({ entry }: { entry: Entry }) {
+function CardImage({ entry }: { entry: ImageProcessed }) {
     return (
         <article className='card_image' key={entry.url}>
             <header>
