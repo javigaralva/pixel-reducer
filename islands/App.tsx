@@ -3,7 +3,7 @@ import { type Entry, type OptimizeResponse } from '../types.d.ts'
 import { formatBytes } from '../utils/formatBytes.ts'
 import { isValidUrl } from '../utils/isValidUrl.ts'
 
-const API_BASE_URL = 'http://localhost:8000'
+const API_BASE_URL = ''
 const API_OPTIMIZE_URL = `${API_BASE_URL}/api/optimize`
 const API_ZIP_URL = `${API_BASE_URL}/api/zip`
 
