@@ -5,7 +5,7 @@ export default function Home() {
     return (
         <>
             <Head>
-                <title>Fresh App</title>
+                <title>Pixel Reducer</title>
                 <link rel='preconnect' href='https://fonts.googleapis.com' />
                 <link rel='preconnect' href='https://fonts.gstatic.com' crossorigin />
                 <link
