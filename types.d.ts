@@ -1,4 +1,4 @@
-export interface Entry {
+export interface ImageProcessed {
     fileNameExt: string
     fileName: string
     extension: string
@@ -14,12 +14,12 @@ export interface Entry {
     percentageSaved: number
 }
 
-export interface OptimizeResponse {
+export interface OptimizedImagesResponse {
     msProcessTime: number
     totalBytes: number
     totalBytesOptimized: number
     totalBytesSaved: number
     totalPercentageSaved: number
-    entriesToBeOptimized: Entry[]
-    entriesCannotBeOptimized: Entry[]
+    imagesOptimized: ImageProcessed[]
+    imagesNotOptimized: ImageProcessed[]
 }
