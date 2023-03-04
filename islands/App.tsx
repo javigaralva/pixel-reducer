@@ -30,7 +30,7 @@ function App() {
             })
     }
 
-    const handleDownload = () => {
+    const handleDownloadAll = () => {
         const responseObj = response
         if (!responseObj?.imagesOptimized?.length) return
 
@@ -77,7 +77,7 @@ function App() {
                     response &&
                     response.imagesOptimized.length > 0 &&
                     (
-                        <button onClick={handleDownload} disabled={isLoading}>
+                        <button onClick={handleDownloadAll} disabled={isLoading}>
                             Download All and save {formatBytes(response.totalBytesSaved)}!
                         </button>
                     )}
@@ -97,6 +97,21 @@ function App() {
 }
 
 function CardImage({ entry }: { entry: ImageProcessed }) {
+
+    const handleDownload = () => {
+        fetch(entry.optimizedUrl).then(response => {
+            response.blob().then(blob => {
+                const url = window.URL.createObjectURL(new Blob([blob]))
+                const link = document.createElement('a')
+                link.href = url
+                link.setAttribute('download', entry.fileNameExt)
+                document.body.appendChild(link)
+                link.click()
+                document.body.removeChild(link)
+            });
+        });
+    }
+
     return (
         <article className='card_image' key={entry.url}>
             <header>
@@ -108,14 +123,14 @@ function CardImage({ entry }: { entry: ImageProcessed }) {
                     <div className='card_image__filename ellipsis' alt={entry.fileName}>{entry.fileName}</div>
                 </div>
                 <div className='card_image__stats'>
+                    <div className='card_image__stats_saved downloadable'>
+                        <span className='card_image__stats_saved_percentage' onClick={handleDownload}>{entry.percentageSaved.toFixed(2)}%</span>
+                        <span className='card_image__stats_saved_bytes' onClick={handleDownload}>{formatBytes(entry.bytesSaved)} saved!</span>
+                    </div>
                     <div className='card_image__stats_size'>
                         <a href={entry.url} target='_blank'>{formatBytes(entry.size)}</a>
                         &nbsp;→&nbsp;
                         <a href={entry.optimizedUrl} target='_blank'>{formatBytes(entry.optimizedSize)}</a>
-                    </div>
-                    <div className='card_image__stats_saved'>
-                        <span className='card_image__stats_saved_percentage'>{entry.percentageSaved.toFixed(2)}%</span>
-                        <span className='card_image__stats_saved_bytes'>{formatBytes(entry.bytesSaved)} saved!</span>
                     </div>
                 </div>
             </footer>

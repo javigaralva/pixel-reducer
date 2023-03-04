@@ -115,7 +115,7 @@ a:active {
 }
 
 .card_image__img {
-     aspect-ratio: 1/1;
+    aspect-ratio: 1/1;
     object-fit: scale-down;
     justify-content: center;
     width: 100%;
@@ -123,6 +123,7 @@ a:active {
     background: rgb(255 255 255 / 8%);
     border-radius: 8px;
     padding: 0.3em;
+    cursor: pointer;
 }
 
 .card_image:hover .card_image__img {
@@ -156,20 +157,54 @@ a:active {
     font-weight: 300;
 }
 
+.card_image__stats {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.card_image__stats_size {
+    text-align: center;
+    display: flex;
+    /* background-color: #181818; */
+    border-radius: 111px;
+    font-size: 1.2rem;
+    justify-content: space-evenly;
+    align-items: center;
+    align-content: center;
+}
+
 .card_image__stats_saved {
     display: flex;
-    justify-content: space-between;
-    align-items: baseline;
+    flex-direction: column;
+    /* justify-content: space-between; */
+    /* gap: 0.4rem; */
+    background: #42ab0014;
+    align-items: center;
+    padding: 0.4rem;
+    border-radius: 111px;
+    transition: all 0.6s;
 }
 
 .card_image__stats_saved_percentage {
     color: hsl(84, 100%, 59%);
     font-size: 1.3rem;
     font-weight: 700;
+    transition: all 0.3s;
 }
 
 .card_image__stats_saved_bytes {
     color: hsl(84deg 100% 35%);
+    font-size: 0.8rem;
+}
+
+.card_image__stats_saved:hover {
+    background-color: hsl(84deg 27% 6%);
+}
+
+.downloadable:hover {
+    cursor: pointer;
+    box-shadow: 0 0 11px 0px hsl(84deg 100% 59%);
 }
 
 .ellipsis {
@@ -177,4 +212,3 @@ a:active {
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-
