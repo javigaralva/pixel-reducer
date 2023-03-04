@@ -133,11 +133,14 @@ function CardImage(
                 <img className='card_image__img' loading='lazy' onClick={onSelection} src={entry.thumbnailUrl} />
             </header>
             <footer>
-                <div className='card_image__filename_and_dimensions'>
-                    <div className='card_image__dimensions'>{entry.height}&nbsp;×&nbsp;{entry.width}</div>
+                <section className='card_image__file_info'>
                     <div className='card_image__filename ellipsis' alt={entry.fileName}>{entry.fileName}</div>
-                </div>
-                <div className='card_image__stats' onClick={handleDownload}>
+                    <div className='card_image__filetype_and_dimensions'>
+                        <div className='card_image__dimensions'>{entry.height}&nbsp;×&nbsp;{entry.width}</div>
+                        <ImageType extension={entry.extension} />
+                    </div>
+                </section>
+                <section className='card_image__stats' onClick={handleDownload}>
                     <div className='card_image__stats_saved downloadable'>
                         <span className='card_image__stats_saved_percentage'>
                             {entry.percentageSaved.toFixed(2)}%
@@ -151,10 +154,15 @@ function CardImage(
                         &nbsp;→&nbsp;
                         <a href={entry.optimizedUrl} target='_blank'>{formatBytes(entry.optimizedSize)}</a>
                     </div>
-                </div>
+                </section>
             </footer>
         </article>
     )
+}
+
+function ImageType({ extension }: { extension: string }) {
+    const extensionModifierCss = extension.toLowerCase().replace('.', '')
+    return <div className={`card_image__type card_image__type--${extensionModifierCss}`}>{extensionModifierCss}</div>;
 }
 
 export default App

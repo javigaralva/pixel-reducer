@@ -147,7 +147,13 @@ a:active {
     gap: 1rem;
 }
 
-.card_image__filename_and_dimensions {
+.card_image__file_info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4em;
+}
+
+.card_image__filetype_and_dimensions {
     display: flex;
     justify-content: space-between;
     gap: 1rem;
@@ -164,6 +170,66 @@ a:active {
     color: rgb(255 255 255 / 0.5);
     font-size: 0.8rem;
     font-weight: 300;
+}
+
+.card_image__type {
+    font-size: 0.8em;
+    font-weight: 700;
+    border-radius: 100px;
+    text-transform: uppercase;
+    padding: 0px 0.4rem;
+}
+
+.card_image__type--avif {
+    background-color: hsl(306deg 50% 50%);
+    color: white;
+
+}
+
+.card_image__type--bmp {
+    background-color: hsl(57deg 50% 50%);
+    color: black;
+
+}
+
+.card_image__type--gif {
+    background-color: hsl(103, 50%, 50%);
+    color: black
+
+}
+
+.card_image__type--jpe {
+    background-color: hsl(57deg 50% 50%);
+    color: white
+
+}
+
+.card_image__type--jpg {
+    background-color: hsl(278, 50%, 50%);
+    color: white;
+
+}
+
+.card_image__type--jpeg {
+    background-color: hsl(197, 50%, 50%);
+    color: black;
+}
+
+.card_image__type--png {
+    background-color: hsl(0deg 50% 50%);
+    color: white
+}
+
+.card_image__type--webp {
+    background-color: hsl(315, 50%, 50%);
+    color: white;
+
+}
+
+.card_image__type--ico {
+    background-color: hsl(347, 50%, 50%);
+    color: white;
+
 }
 
 .card_image__stats {
