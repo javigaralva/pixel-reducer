@@ -20,6 +20,8 @@
     -webkit-text-size-adjust: 100%;
 
     --card-size: 16rem;
+    --accent: hsl(84deg 100% 35%);
+    --accent-lighter: hsl(84deg 100% 59%);
 }
 
 body {
@@ -110,8 +112,14 @@ a:active {
 
 .card_image:hover {
     scale: 1.1;
-    box-shadow: -2px 14px 31px 0px rgba(0, 0, 0, 0.5), inset -1px -112px 37px -20px rgb(255 255 255 / 10%);
+    box-shadow: -2px 14px 31px 0px rgb(0 0 0 / 50%), inset -1px -112px 37px -20px rgb(255 255 255 / 10%);
     background-color: hsl(213 22% 13% / 1);
+}
+
+.card_image.selected {
+    outline: var(--accent);
+    outline-style: solid;
+    outline-width: 3px;
 }
 
 .card_image__img {
@@ -194,7 +202,7 @@ a:active {
 }
 
 .card_image__stats_saved_bytes {
-    color: hsl(84deg 100% 35%);
+    color: var(--accent);
     font-size: 0.8rem;
 }
 
@@ -204,7 +212,7 @@ a:active {
 
 .downloadable:hover {
     cursor: pointer;
-    box-shadow: 0 0 11px 0px hsl(84deg 100% 59%);
+    box-shadow: 0 0 11px 0px var(--accent-lighter);
 }
 
 .ellipsis {
