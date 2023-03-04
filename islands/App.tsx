@@ -1,4 +1,5 @@
 import { useState } from 'preact/hooks'
+import { DownloadIcon } from '/components/icons/DownloadIcon.tsx'
 import { type ImageProcessed, type OptimizedImagesResponse } from '/types.d.ts'
 import { formatBytes } from '/utils/formatBytes.ts'
 import { isValidUrl } from '/utils/isValidUrl.ts'
@@ -102,7 +103,7 @@ function App() {
                                 />
                             ))}
                         </div>
-                        <pre style={{ textAlign: 'initial' }}>{JSON.stringify(response, null, 2)}</pre>
+                        {/* <pre style={{ textAlign: 'initial' }}>{JSON.stringify(response, null, 2)}</pre> */}
                     </section>
                 )
                 : null)}
@@ -134,20 +135,25 @@ function CardImage(
             </header>
             <footer>
                 <section className='card_image__file_info'>
-                    <div className='card_image__filename ellipsis' alt={entry.fileName}>{entry.fileName}</div>
                     <div className='card_image__filetype_and_dimensions'>
                         <div className='card_image__dimensions'>{entry.height}&nbsp;×&nbsp;{entry.width}</div>
                         <ImageType extension={entry.extension} />
                     </div>
+                    <div className='card_image__filename ellipsis' alt={entry.fileName}>{entry.fileName}</div>
                 </section>
                 <section className='card_image__stats' onClick={handleDownload}>
                     <div className='card_image__stats_saved downloadable'>
-                        <span className='card_image__stats_saved_percentage'>
-                            {entry.percentageSaved.toFixed(2)}%
-                        </span>
-                        <span className='card_image__stats_saved_bytes'>
-                            {formatBytes(entry.bytesSaved)} saved!
-                        </span>
+                        <div className='card_image__stats_saved_text'>
+                            <span className='card_image__stats_saved_percentage'>
+                                {entry.percentageSaved.toFixed(2)}%
+                            </span>
+                            <span className='card_image__stats_saved_bytes'>
+                                {formatBytes(entry.bytesSaved)} saved!
+                            </span>
+                        </div>
+                        <div className='card_image__stats_download_icon'>
+                            <DownloadIcon />
+                        </div>
                     </div>
                     <div className='card_image__stats_size'>
                         <a href={entry.url} target='_blank'>{formatBytes(entry.size)}</a>
@@ -162,7 +168,7 @@ function CardImage(
 
 function ImageType({ extension }: { extension: string }) {
     const extensionModifierCss = extension.toLowerCase().replace('.', '')
-    return <div className={`card_image__type card_image__type--${extensionModifierCss}`}>{extensionModifierCss}</div>;
+    return <div className={`card_image__type card_image__type--${extensionModifierCss}`}>{extensionModifierCss}</div>
 }
 
 export default App

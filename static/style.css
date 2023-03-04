@@ -101,6 +101,7 @@ a:active {
 
 .card_image {
     display: flex;
+    gap: 0.4rem;
     flex-direction: column;
     list-style-type: none;
     border-radius: 10px;
@@ -195,13 +196,11 @@ a:active {
 .card_image__type--gif {
     background-color: hsl(103, 50%, 50%);
     color: black
-
 }
 
 .card_image__type--jpe {
     background-color: hsl(57deg 50% 50%);
     color: white
-
 }
 
 .card_image__type--jpg {
@@ -251,14 +250,23 @@ a:active {
 
 .card_image__stats_saved {
     display: flex;
-    flex-direction: column;
-    /* justify-content: space-between; */
+    /* flex-direction: column; */
     /* gap: 0.4rem; */
     background: #42ab0014;
     align-items: center;
     padding: 0.4rem;
     border-radius: 111px;
-    transition: all 0.6s;
+    transition: all 0.25s;
+    justify-content: space-between;
+}
+
+.card_image__stats_saved_text {
+    display: flex;
+    flex-direction: column;
+    /* align-self: center; */
+    width: 100%;
+    align-items: center;
+    margin-left: 1rem;
 }
 
 .card_image__stats_saved_percentage {
@@ -271,6 +279,23 @@ a:active {
 .card_image__stats_saved_bytes {
     color: var(--accent);
     font-size: 0.8rem;
+}
+
+.card_image__stats_download_icon {
+    display: flex;
+    margin-right: 0.4rem;
+    color: var(--accent);
+    transition: color 0.3s;
+}
+
+.card_image__stats_saved:hover .card_image__stats_download_icon {
+    color: var(--accent-lighter);
+}
+
+.card_image__stats_download_icon>img {
+    color: var(--accent-lighter);
+    fill: var(--accent-lighter);
+    stroke: var(--accent-lighter);
 }
 
 .card_image__stats_saved:hover {
