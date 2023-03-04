@@ -151,6 +151,7 @@ a:active {
     display: flex;
     justify-content: space-between;
     gap: 1rem;
+    align-items: baseline;
 }
 
 .card_image__filename {
