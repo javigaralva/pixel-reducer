@@ -38,7 +38,7 @@ button {
     border-radius: 8px;
     border: 1px solid transparent;
     padding: 0.6em 1.2em;
-    font-size: 1.5em;
+    font-size: 1.5rem;
     font-weight: 700;
     font-family: inherit;
     border-color: var(--accent);
@@ -86,7 +86,8 @@ a:active {
 }
 
 .header {
-    width: 80%;
+    width: 70%;
+    margin: 0 auto;
 }
 
 .brand {
@@ -149,7 +150,9 @@ a:active {
 .brand__subtitle_optimize {
     color: white;
     filter: drop-shadow(0em 0em 10px var(--accent-lighter));
-    transition:all 2s ease-out 2s;
+    transition:
+        color 2s ease-out 2s,
+        filter 2s ease-out 2s;
 }
 
 .brand__description {
@@ -423,4 +426,40 @@ a:active {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+@media (max-width: 800px) {
+    .header {
+        width: 100%;
+    }
+
+    .App {
+        width: 85%;
+        margin: 0 auto;
+    }
+
+    .brand {
+        margin: 2rem 0px;
+    }
+
+    .brand__title {
+        font-size: 3.6rem;
+        line-height: 2.8rem;
+    }
+
+    .brand__subtitle {
+        font-size: 1.5rem;
+    }
+
+    .brand__description {
+        font-size: 1rem;
+    }
+
+    button {
+        font-size: 1.3rem;
+    }
+
+    .cards-image-container {
+        padding: 26px 10px;
+    }
 }
