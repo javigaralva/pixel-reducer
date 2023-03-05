@@ -82,42 +82,69 @@ a:active {
 }
 
 .brand__title {
-    background-image: -webkit-linear-gradient(283deg, #ffffff 0%, hsl(84deg 100% 59%) 40%);
+/*     background-image: -webkit-linear-gradient(283deg, #ffffff 0%, hsl(84deg 100% 59%) 40%);
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    text-shadow: 5px 4px 20px #b5ff4559;
+    text-shadow: 5px 4px 20px #b5ff4559; */
     filter: drop-shadow(5px 2px #333);
     font-size: 4.6rem;
     line-height: 3.6rem;
     padding: 1rem 0rem;
-    display: flex;
+/*     display: flex;
     flex-direction: column;
+    text-overflow: hidden; */
+}
+
+.brand__title_pixel.expanded {
+    color: var(--accent-lighter);
+    margin-left: 3vw;
+    filter: blur(20px);
+    letter-spacing: 10vw;
+    /* letter-spacing: 3vw; */
 }
 
 .brand__title_pixel {
-    letter-spacing: 0em;
-    transition: all 1s ease-in-out 0s;
+    color: white;
+    margin-left: 0vw;
+    transition:
+        filter 1s cubic-bezier(0.165, 0.84, 0.44, 1),
+        letter-spacing 2s cubic-bezier(0.19, 1, 0.22, 1),
+        margin-left 5s cubic-bezier(0.19, 1, 0.22, 1),
+        color 6s cubic-bezier(0.19, 1, 0.22, 1) 1s;
+}
+
+.brand__title_reducer.expanded {
+    color: white;
+    margin-left: -50vw;
+    filter: blur(40px);
+    letter-spacing: 5vw;
+    /* letter-spacing: 0vw; */
 }
 
 .brand__title_reducer {
-    letter-spacing: 0em;
-    transition: all 1.5s ease-in-out 0s;
+    color: var(--accent-lighter);
+    margin-left: 0vw;
+    transition:
+        filter 2s cubic-bezier(0.165, 0.84, 0.44, 1),
+        letter-spacing 4s cubic-bezier(0.19, 1, 0.22, 1),
+        margin-left 4s cubic-bezier(0.19, 1, 0.22, 1),
+        color 6s cubic-bezier(0.19, 1, 0.22, 1) 1s;
 }
-
+/*
 .brand__title_pixel.expanded {
     letter-spacing: 2em;
 }
 
 .brand__title_reducer.expanded {
     letter-spacing: 2em;
-}
+} */
+
 
 .form_input {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 2rem;
     gap: 2rem;
 }
 
@@ -152,7 +179,7 @@ a:active {
 .results {
     display: flex;
     flex-direction: column;
-    width: 80%;
+    /* width: 80%; */
     max-width: 1200px;
     margin: 0 auto;
 }
