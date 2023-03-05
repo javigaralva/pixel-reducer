@@ -24,6 +24,7 @@ export async function optimizeStaticImagesFrom({ url }: { url: string }): Promis
     const msProcessTime = Date.now() - tInitProcess
 
     return {
+        urlProcessed: url,
         msProcessTime,
         totalBytes,
         totalBytesOptimized,

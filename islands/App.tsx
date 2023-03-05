@@ -77,69 +77,79 @@ function App() {
     const initialStateClass = isFirstRender ? 'initial_state' : ''
 
     return (
-        (<div className='App'>
-            <header className="header">
-                <section className='brand'>
-                    <h1 className='brand__title'>
-                        <span className={`brand__title_pixel ${initialStateClass}`}>Pixel</span>
-                        <br/>
-                        <span className={`brand__title_reducer ${initialStateClass}`}>Reducer</span>
-                    </h1>
-                    <h2 className='brand__subtitle'><span className={`brand__subtitle_optimize ${initialStateClass}`}>Optimizes</span> the size of images on a website.</h2>
-                    <p className='brand__description'>Download all images with one click. Commitment to quality with zero setup.</p>
-                </section>
-                <form
-                    className='form_input'
-                    onSubmit={(e) => {
-                        e.preventDefault()
-                        handleOptimizeImages()
-                    }}
-                >
-                    <label className='form_input__label_input'>
-                        URL
-                        <input
-                            className='form_input__input'
-                            value={urlInput}
-                            type={'url'}
-                            pattern="https?://.+"
-                            size={60}
-                            disabled={isLoading}
-                            placeholder={'https://midu.dev'}
-                            required
-                            onInput={(e) => setUrlInput(e.currentTarget.value)}
-                        />
-                    </label>
-                    <div>
-                        <button onClick={handleOptimizeImages} disabled={isLoading || !isValidUrlInput}>Analyze!</button>
-                        {!isLoading &&
-                            response &&
-                            response.imagesOptimized.length > 0 &&
-                            (
-                                <button onClick={handleDownloadAll} disabled={isLoading}>
-                                    Download All and save {formatBytes(response.totalBytesSaved)}!
-                                </button>
-                            )}
-                    </div>
-                </form>
-            </header>
-            {isLoading ? <div className="loader"></div> : ((response?.imagesOptimized.length ?? 0) > 0
-                ? (
-                    <section className='results'>
-                        <div className='cards-image-container'>
-                            {response?.imagesOptimized.map((entry) => (
-                                <CardImage
-                                    entry={entry}
-                                    isSelected={imagesSelected.includes(entry.url)}
-                                    onSelection={() => handleCardSelection(entry.url)}
-                                />
-                            ))}
-                        </div>
-                        {/* <pre style={{ textAlign: 'initial' }}>{JSON.stringify(response, null, 2)}</pre> */}
+        (
+            <div className='App'>
+                <header className='header'>
+                    <section className='brand'>
+                        <h1 className='brand__title'>
+                            <span className={`brand__title_pixel ${initialStateClass}`}>Pixel</span>
+                            <br />
+                            <span className={`brand__title_reducer ${initialStateClass}`}>Reducer</span>
+                        </h1>
+                        <h2 className='brand__subtitle'>
+                            <span className={`brand__subtitle_optimize ${initialStateClass}`}>Optimizes</span>{' '}
+                            the size of images on a website.
+                        </h2>
+                        <p className='brand__description'>
+                            Download all images with one click. Commitment to quality with zero setup.
+                        </p>
                     </section>
-                )
-                : null)}
-        </div>)
-    );
+                    <form
+                        className='form_input'
+                        onSubmit={(e) => {
+                            e.preventDefault()
+                            handleOptimizeImages()
+                        }}
+                    >
+                        <label className='form_input__label_input'>
+                            URL
+                            <input
+                                className='form_input__input'
+                                value={urlInput}
+                                type={'url'}
+                                pattern='https?://.+'
+                                disabled={isLoading}
+                                placeholder={'https://midu.dev'}
+                                required
+                                onInput={(e) => setUrlInput(e.currentTarget.value)}
+                            />
+                        </label>
+                        <div>
+                            <button onClick={handleOptimizeImages} disabled={isLoading || !isValidUrlInput}>
+                                Analyze!
+                            </button>
+                            {!isLoading &&
+                                response &&
+                                response.imagesOptimized.length > 0 &&
+                                (
+                                    <button onClick={handleDownloadAll} disabled={isLoading}>
+                                        Download All and save {formatBytes(response.totalBytesSaved)}!
+                                    </button>
+                                )}
+                        </div>
+                    </form>
+                </header>
+                {isLoading
+                    ? <div className='loader'></div>
+                    : ((response?.imagesOptimized.length ?? 0) > 0
+                        ? (
+                            <section className='results'>
+                                <div className='cards-image-container'>
+                                    {response?.imagesOptimized.map((entry) => (
+                                        <CardImage
+                                            entry={entry}
+                                            isSelected={imagesSelected.includes(entry.url)}
+                                            onSelection={() => handleCardSelection(entry.url)}
+                                        />
+                                    ))}
+                                </div>
+                                {/* <pre style={{ textAlign: 'initial' }}>{JSON.stringify(response, null, 2)}</pre> */}
+                            </section>
+                        )
+                        : null)}
+            </div>
+        )
+    )
 }
 
 function CardImage(
