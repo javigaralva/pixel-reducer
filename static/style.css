@@ -38,22 +38,25 @@ button {
     border-radius: 8px;
     border: 1px solid transparent;
     padding: 0.6em 1.2em;
-    font-size: 1em;
+    font-size: 1.5em;
     font-weight: 700;
     font-family: inherit;
-    background-color: #1a1a1a;
+    border-color: var(--accent);
     cursor: pointer;
     transition: border-color 0.25s, background-color 0.25s;
 }
 
 button:hover:enabled {
-    border-color: #646cff;
-    background-color: #646cff;
+    box-shadow: 0px 0px 5px 5px var(--accent);
 }
 
 button:focus,
 button:focus-visible {
     outline: 4px auto -webkit-focus-ring-color;
+}
+
+button:enabled {
+    background-color: transparent;
 }
 
 button:disabled {
@@ -82,6 +85,10 @@ a:active {
     margin: 0 auto;
 }
 
+.header {
+    width: 80%;
+}
+
 .brand {
     margin: 4rem 0px;
 }
@@ -93,7 +100,7 @@ a:active {
     line-height: 3.6rem;
 }
 
-.brand__title_pixel.expanded {
+.brand__title_pixel.initial_state {
     color: var(--accent-lighter);
 }
 
@@ -107,7 +114,7 @@ a:active {
         color 3s cubic-bezier(0.19, 1, 0.22, 1) 2s;
 }
 
-.brand__title_reducer.expanded {
+.brand__title_reducer.initial_state {
     color: rgba(255, 255, 255, 1);
     opacity: 0;
     filter: blur(10px);
@@ -128,10 +135,21 @@ a:active {
 
 .brand__subtitle {
     font-size: 2rem;
-    color: rgba(255, 255, 255, 0.75);
+    color: hsl(0deg 0% 75%);
     margin: 2rem 0px 1rem 0px;
     font-weight: 700;
     line-height: 1em;
+}
+
+.brand__subtitle_optimize.initial_state {
+    color: hsl(0deg 0% 75%);
+    filter: drop-shadow(0em 0em 20px rgba(255, 0, 0, 0));
+}
+
+.brand__subtitle_optimize {
+    color: white;
+    filter: drop-shadow(0em 0em 10px var(--accent-lighter));
+    transition:all 2s ease-out 2s;
 }
 
 .brand__description {
