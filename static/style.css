@@ -61,6 +61,7 @@ button:enabled {
 
 button:disabled {
     cursor: auto;
+    border-color: transparent
 }
 
 a:link {
@@ -88,6 +89,7 @@ a:active {
 .header {
     width: 70%;
     margin: 0 auto;
+    text-align: center;
 }
 
 .brand {
@@ -118,19 +120,17 @@ a:active {
 .brand__title_reducer.initial_state {
     color: rgba(255, 255, 255, 1);
     opacity: 0;
-    filter: blur(10px);
-    letter-spacing: 8vw;
+    filter: blur(6px);
+    letter-spacing: 4vw;
 }
 
 .brand__title_reducer {
     color: var(--accent-lighter);
     opacity: 1;
-    margin-left: 0vw;
     transition:
         filter 2s linear 1s,
         letter-spacing 3s cubic-bezier(0.23, 1, 0.320, 1) 0s,
-        margin-left 4s cubic-bezier(0.19, 1, 0.22, 1),
-        opacity 2s cubic-bezier(0.165, 0.84, 0.44, 1),
+        opacity 1s linear,
         color 3s cubic-bezier(0.19, 1, 0.22, 1) 2s;
 }
 
@@ -426,6 +426,41 @@ a:active {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+.loader {
+    display: flex;
+    justify-content: center;
+}
+.loader::after,
+.loader::before {
+    animation: loader 2s ease-in-out infinite;
+    content: '';
+    border: 3px solid var(--accent);
+    width: 200px;
+    height: 200px;
+    position: absolute;
+    border-radius: 50%;
+}
+
+.loader::after {
+    opacity: 0;
+    animation-delay: 1s;
+}
+
+@keyframes loader {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(0.5);
+        opacity: 0;
+    }
 }
 
 @media (max-width: 800px) {

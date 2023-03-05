@@ -122,7 +122,7 @@ function App() {
                     </div>
                 </form>
             </header>
-            {isLoading ? <p>Loading...</p> : ((response?.imagesOptimized.length ?? 0) > 0
+            {isLoading ? <div className="loader"></div> : ((response?.imagesOptimized.length ?? 0) > 0
                 ? (
                     <section className='results'>
                         <div className='cards-image-container'>
