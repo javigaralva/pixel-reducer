@@ -1,4 +1,4 @@
-import { useState } from 'preact/hooks'
+import { useEffect, useState } from 'preact/hooks'
 import { DownloadIcon } from '/components/icons/DownloadIcon.tsx'
 import { type ImageProcessed, type OptimizedImagesResponse } from '/types.d.ts'
 import { formatBytes } from '/utils/formatBytes.ts'
@@ -9,10 +9,15 @@ const API_OPTIMIZE_URL = `${API_BASE_URL}/api/optimize`
 const API_ZIP_URL = `${API_BASE_URL}/api/zip`
 
 function App() {
+    const [isFirstRender, setIsFirstRender] = useState(true)
     const [urlInput, setUrlInput] = useState('')
     const [isLoading, setIsLoading] = useState(false)
     const [response, setResponse] = useState<OptimizedImagesResponse | null>(null)
     const [imagesSelected, setImagesSelected] = useState<string[]>([])
+
+    useEffect(() => {
+        setIsFirstRender(false)
+    }, [])
 
     const handleOptimizeImages = () => {
         if (!urlInput) return
@@ -69,28 +74,48 @@ function App() {
     }
 
     const isValidUrlInput = isValidUrl(urlInput)
+    const expandedTitleClass = isFirstRender ? 'expanded' : ''
 
     return (
-        <div className='App'>
-            URL:{' '}
-            <input
-                value={urlInput}
-                type={'text'}
-                size={60}
-                disabled={isLoading}
-                onInput={(e) => setUrlInput(e.currentTarget.value)}
-            />
-            <div>
-                <button onClick={handleOptimizeImages} disabled={isLoading || !isValidUrlInput}>Analyze!</button>
-                {!isLoading &&
-                    response &&
-                    response.imagesOptimized.length > 0 &&
-                    (
-                        <button onClick={handleDownloadAll} disabled={isLoading}>
-                            Download All and save {formatBytes(response.totalBytesSaved)}!
-                        </button>
-                    )}
-            </div>
+        (<div className='App'>
+            <header className='brand'>
+                <h1 className='brand__title'><span className={`brand__title_pixel ${expandedTitleClass}`}>Pixel</span><span className={`brand__title_reducer ${expandedTitleClass}`}>Reducer</span></h1>
+                <h2 className='brand__subtitle'>Optimizes the size of images on a website.</h2>
+                <p className='brand__description'>Download all images with one click. Commitment to quality with zero setup.</p>
+            </header>
+            <form
+                className='form_input'
+                onSubmit={(e) => {
+                    e.preventDefault()
+                    handleOptimizeImages()
+                }}
+            >
+                <label className='form_input__label_input'>
+                    URL
+                    <input
+                        className='form_input__input'
+                        value={urlInput}
+                        type={'url'}
+                        pattern="https?://.+"
+                        size={60}
+                        disabled={isLoading}
+                        placeholder={'https://midu.dev'}
+                        required
+                        onInput={(e) => setUrlInput(e.currentTarget.value)}
+                    />
+                </label>
+                <div>
+                    <button onClick={handleOptimizeImages} disabled={isLoading || !isValidUrlInput}>Analyze!</button>
+                    {!isLoading &&
+                        response &&
+                        response.imagesOptimized.length > 0 &&
+                        (
+                            <button onClick={handleDownloadAll} disabled={isLoading}>
+                                Download All and save {formatBytes(response.totalBytesSaved)}!
+                            </button>
+                        )}
+                </div>
+            </form>
             {isLoading ? <p>Loading...</p> : ((response?.imagesOptimized.length ?? 0) > 0
                 ? (
                     <section className='results'>
@@ -107,8 +132,8 @@ function App() {
                     </section>
                 )
                 : null)}
-        </div>
-    )
+        </div>)
+    );
 }
 
 function CardImage(
