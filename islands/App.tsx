@@ -182,8 +182,8 @@ function CardImage(
                     </div>
                     <div className='card_image__filename ellipsis' alt={entry.fileName}>{entry.fileName}</div>
                 </section>
-                <section className='card_image__stats' onClick={handleDownload}>
-                    <div className='card_image__stats_saved downloadable'>
+                <section className='card_image__stats'>
+                    <div className='card_image__stats_saved downloadable' onClick={handleDownload}>
                         <div className='card_image__stats_saved_text'>
                             <span className='card_image__stats_saved_percentage'>
                                 {entry.percentageSaved.toFixed(2)}%
