@@ -26,6 +26,7 @@
 
 body {
     margin: 0;
+    overflow: hidden;
 }
 
 h1 {
@@ -81,27 +82,19 @@ a:active {
     margin: 0 auto;
 }
 
+.brand {
+    margin: 4rem 0px;
+}
+
 .brand__title {
-/*     background-image: -webkit-linear-gradient(283deg, #ffffff 0%, hsl(84deg 100% 59%) 40%);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    text-shadow: 5px 4px 20px #b5ff4559; */
+    margin: 0px;
     filter: drop-shadow(5px 2px #333);
     font-size: 4.6rem;
     line-height: 3.6rem;
-    padding: 1rem 0rem;
-/*     display: flex;
-    flex-direction: column;
-    text-overflow: hidden; */
 }
 
 .brand__title_pixel.expanded {
     color: var(--accent-lighter);
-    margin-left: 3vw;
-    filter: blur(20px);
-    letter-spacing: 10vw;
-    /* letter-spacing: 3vw; */
 }
 
 .brand__title_pixel {
@@ -111,35 +104,42 @@ a:active {
         filter 1s cubic-bezier(0.165, 0.84, 0.44, 1),
         letter-spacing 2s cubic-bezier(0.19, 1, 0.22, 1),
         margin-left 5s cubic-bezier(0.19, 1, 0.22, 1),
-        color 6s cubic-bezier(0.19, 1, 0.22, 1) 1s;
+        color 3s cubic-bezier(0.19, 1, 0.22, 1) 2s;
 }
 
 .brand__title_reducer.expanded {
-    color: white;
-    margin-left: -50vw;
-    filter: blur(40px);
-    letter-spacing: 5vw;
-    /* letter-spacing: 0vw; */
+    color: rgba(255, 255, 255, 1);
+    opacity: 0;
+    filter: blur(10px);
+    letter-spacing: 8vw;
 }
 
 .brand__title_reducer {
     color: var(--accent-lighter);
+    opacity: 1;
     margin-left: 0vw;
     transition:
-        filter 2s cubic-bezier(0.165, 0.84, 0.44, 1),
-        letter-spacing 4s cubic-bezier(0.19, 1, 0.22, 1),
+        filter 2s linear 1s,
+        letter-spacing 3s cubic-bezier(0.23, 1, 0.320, 1) 0s,
         margin-left 4s cubic-bezier(0.19, 1, 0.22, 1),
-        color 6s cubic-bezier(0.19, 1, 0.22, 1) 1s;
-}
-/*
-.brand__title_pixel.expanded {
-    letter-spacing: 2em;
+        opacity 2s cubic-bezier(0.165, 0.84, 0.44, 1),
+        color 3s cubic-bezier(0.19, 1, 0.22, 1) 2s;
 }
 
-.brand__title_reducer.expanded {
-    letter-spacing: 2em;
-} */
+.brand__subtitle {
+    font-size: 2rem;
+    color: rgba(255, 255, 255, 0.75);
+    margin: 2rem 0px 1rem 0px;
+    font-weight: 700;
+    line-height: 1em;
+}
 
+.brand__description {
+    margin: 0;
+    font-size: 1.3rem;
+    color: rgb(255 255 255 / 50%);
+    font-weight: 300;
+}
 
 .form_input {
     display: flex;
@@ -179,7 +179,6 @@ a:active {
 .results {
     display: flex;
     flex-direction: column;
-    /* width: 80%; */
     max-width: 1200px;
     margin: 0 auto;
 }
