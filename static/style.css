@@ -114,7 +114,7 @@ a:active {
         filter 1s cubic-bezier(0.165, 0.84, 0.44, 1),
         letter-spacing 2s cubic-bezier(0.19, 1, 0.22, 1),
         margin-left 5s cubic-bezier(0.19, 1, 0.22, 1),
-        color 3s cubic-bezier(0.19, 1, 0.22, 1) 2s;
+        color 3s cubic-bezier(0.19, 1, 0.22, 1) 1s;
 }
 
 .brand__title_reducer.initial_state {
@@ -129,10 +129,10 @@ a:active {
     opacity: 1;
     letter-spacing: -0.2rem;
     transition:
-        filter 2s linear 1s,
+        filter 1s linear 0s,
         letter-spacing 2.5s cubic-bezier(0.23, 1, 0.320, 1) 0s,
         opacity 1.5s linear,
-        color 3s cubic-bezier(0.19, 1, 0.22, 1) 2s;
+        color 3s cubic-bezier(0.19, 1, 0.22, 1) 1s;
 }
 
 .brand__subtitle {
