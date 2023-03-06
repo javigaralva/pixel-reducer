@@ -121,7 +121,7 @@ export function ResultsBrief() {
                                     disabled={isLoadingDownloadAll}
                                 >
                                     <div className='card_image__stats_saved_text'>
-                                        <span className=''>
+                                        <span className='card_image__download_text'>
                                             {isLoadingDownloadAll ? 'Downloading...' : 'Download all'}
                                         </span>
                                         <span className='card_image__stats_saved_percentage'>
@@ -143,7 +143,7 @@ export function ResultsBrief() {
                                             disabled={totalImagesSelected === 0 || isLoadingDownloadSelected}
                                         >
                                             <div className='card_image__stats_saved_text'>
-                                                <span className=''>
+                                                <span className='card_image__download_text'>
                                                     {isLoadingDownloadSelected ? 'Downloading...' : 'Download selected'}
                                                 </span>
                                                 <span className='card_image__stats_saved_percentage'>
