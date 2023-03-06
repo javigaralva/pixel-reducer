@@ -1,95 +1,23 @@
 import { useContext, useEffect, useState } from 'preact/hooks'
 import { AppState } from '../context/AppContext.ts'
-import { useOptimizeImages } from '/hooks/useOptimizeImages.ts'
 import { DownloadIcon } from '/components/icons/DownloadIcon.tsx'
 import { type ImageProcessed } from '/types.d.ts'
 import { formatBytes } from '/utils/formatBytes.ts'
-import { isValidUrl } from '/utils/isValidUrl.ts'
 import { useDownloadOptimizedImagesAsZip } from '/hooks/useDownloadOptimizedImagesAsZip.ts'
 import { useDownloadOptimizedImage } from '/hooks/useDownloadOptimizedImage.ts'
+import { Brand } from '/components/Brand.tsx'
+import { InputUrlForm } from '../components/InputUrlForm.tsx'
 
 function App() {
-    const appState = useContext(AppState)
-    const [urlInput, setUrlInput] = useState('')
-    const {
-        isLoading: isLoadingDownloadAll,
-        startDownloadZip: startDownloadAll,
-    } = useDownloadOptimizedImagesAsZip()
-    const {
-        isLoading,
-        optimizedImagesResponse,
-        optimizeImagesFrom,
-    } = useOptimizeImages()
-
-    const handleOptimizeImages = () => {
-        optimizeImagesFrom(urlInput)
-    }
-
-    useEffect(() => {
-        appState.setOptimizedImagesResponse(optimizedImagesResponse)
-    }, [optimizedImagesResponse])
-
-    const handleDownloadAll = () => {
-        startDownloadAll(appState.optimizedImagesResponse.value?.imagesOptimized)
-    }
-
-    const isValidUrlInput = isValidUrl(urlInput)
-
+    const [isLoading, setIsLoading] = useState(false)
     return (
-        (
-            <div className='App'>
-                <header className='header'>
-                    <section className='brand'>
-                        <h1 className='brand__title'>
-                            <span className='brand__title_pixel'>Pixel</span>
-                            <br />
-                            <span className='brand__title_reducer'>Reducer</span>
-                        </h1>
-                        <h2 className='brand__subtitle'>
-                            <span className='brand__subtitle_optimize'>Optimizes</span> the size of images on a website.
-                        </h2>
-                        <p className='brand__description'>
-                            Download all images with one click. Commitment to quality with zero setup.
-                        </p>
-                    </section>
-                    {isLoading ? null : (
-                        <form
-                            className='form_input'
-                            onSubmit={(e) => {
-                                e.preventDefault()
-                                handleOptimizeImages()
-                            }}
-                        >
-                            <label className='form_input__label_input'>
-                                URL
-                                <input
-                                    className='form_input__input'
-                                    value={urlInput}
-                                    type={'url'}
-                                    pattern='https?://.+'
-                                    disabled={isLoading}
-                                    placeholder={'https://midu.dev'}
-                                    required
-                                    onInput={(e) => setUrlInput(e.currentTarget.value)}
-                                />
-                            </label>
-                            <div>
-                                <button disabled={isLoading || !isValidUrlInput}>
-                                    Analyze!
-                                </button>
-                                {!isLoading &&
-                                    (
-                                        <button onClick={handleDownloadAll} disabled={isLoadingDownloadAll}>
-                                            {isLoadingDownloadAll ? 'Downloading...' : 'Download All!'}
-                                        </button>
-                                    )}
-                            </div>
-                        </form>
-                    )}
-                </header>
-                {isLoading ? <div className='loader'></div> : <OptimizedResults />}
-            </div>
-        )
+        <div className='App'>
+            <header className='header'>
+                <Brand />
+                <InputUrlForm onIsLoading={setIsLoading} />
+            </header>
+            {isLoading ? <div className='loader'></div> : <OptimizedResults />}
+        </div>
     )
 }
 
