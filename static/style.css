@@ -481,6 +481,10 @@ a:active {
     margin-left: 1rem;
 }
 
+.card_image__download_text {
+    font-size: 1.2rem;
+}
+
 .card_image__stats_saved_percentage {
     color: hsl(84, 100%, 59%);
     font-size: 1.3rem;
