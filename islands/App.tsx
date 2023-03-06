@@ -10,14 +10,9 @@ const API_OPTIMIZE_URL = `${API_BASE_URL}/api/optimize`
 const API_ZIP_URL = `${API_BASE_URL}/api/zip`
 
 function App() {
-    const [isFirstRender, setIsFirstRender] = useState(true)
     const [urlInput, setUrlInput] = useState('')
     const [isLoading, setIsLoading] = useState(false)
     const appState = useContext(AppState)
-
-    useEffect(() => {
-        setIsFirstRender(false)
-    }, [])
 
     const handleOptimizeImages = () => {
         if (!urlInput) return
@@ -67,7 +62,6 @@ function App() {
     }
 
     const isValidUrlInput = isValidUrl(urlInput)
-    const initialStateClass = isFirstRender ? 'initial_state' : ''
 
     return (
         (
@@ -75,12 +69,12 @@ function App() {
                 <header className='header'>
                     <section className='brand'>
                         <h1 className='brand__title'>
-                            <span className={`brand__title_pixel ${initialStateClass}`}>Pixel</span>
+                            <span className='brand__title_pixel'>Pixel</span>
                             <br />
-                            <span className={`brand__title_reducer ${initialStateClass}`}>Reducer</span>
+                            <span className='brand__title_reducer'>Reducer</span>
                         </h1>
                         <h2 className='brand__subtitle'>
-                            <span className={`brand__subtitle_optimize ${initialStateClass}`}>Optimizes</span>{' '}
+                            <span className='brand__subtitle_optimize'>Optimizes</span>{' '}
                             the size of images on a website.
                         </h2>
                         <p className='brand__description'>

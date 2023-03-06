@@ -103,36 +103,39 @@ a:active {
     line-height: 4.5rem;
 }
 
-.brand__title_pixel.initial_state {
-    color: var(--accent-lighter);
-}
-
 .brand__title_pixel {
-    color: white;
-    margin-left: 0vw;
-    transition:
-        filter 1s cubic-bezier(0.165, 0.84, 0.44, 1),
-        letter-spacing 2s cubic-bezier(0.19, 1, 0.22, 1),
-        margin-left 5s cubic-bezier(0.19, 1, 0.22, 1),
-        color 3s cubic-bezier(0.19, 1, 0.22, 1) 1s;
+    color: var(--accent-lighter);
+    animation:
+        pixel_animation_color 3s cubic-bezier(0.19, 1, 0.22, 1) 1s normal forwards;
 }
 
-.brand__title_reducer.initial_state {
-    color: rgba(255, 255, 255, 1);
-    opacity: 0.4;
-    filter: blur(6px);
-    letter-spacing: 1vw;
+@keyframes pixel_animation_color {
+    100% { color: white; }
 }
 
 .brand__title_reducer {
-    color: var(--accent-lighter);
-    opacity: 1;
-    letter-spacing: -0.2rem;
-    transition:
-        filter 1s linear 0s,
-        letter-spacing 2.5s cubic-bezier(0.23, 1, 0.320, 1) 0s,
-        opacity 1.5s linear,
-        color 3s cubic-bezier(0.19, 1, 0.22, 1) 1s;
+    filter: blur(6px);
+    letter-spacing: 1vw;
+    opacity: 0;
+    color: rgba(255, 255, 255, 1);
+    animation:
+        reducer_animation_filter 1.5s linear 0s normal forwards,
+        reducer_animation_letter-spacing 2.5s cubic-bezier(0.23, 1, 0.320, 1) 0s normal forwards,
+        reducer_animation_opacity 1.5s linear 0s normal forwards,
+        reducer_animation_color 3s cubic-bezier(0.19, 1, 0.22, 1) 1s normal forwards;
+}
+
+@keyframes reducer_animation_filter {
+    100% { filter: blur(0px); }
+}
+@keyframes reducer_animation_letter-spacing {
+    100% { letter-spacing: -0.2rem; }
+}
+@keyframes reducer_animation_opacity {
+    100% { opacity: 1; }
+}
+@keyframes reducer_animation_color {
+    100% { color: var(--accent-lighter); }
 }
 
 .brand__subtitle {
@@ -143,17 +146,17 @@ a:active {
     line-height: 1em;
 }
 
-.brand__subtitle_optimize.initial_state {
+.brand__subtitle_optimize {
     color: hsl(0deg 0% 75%);
     filter: drop-shadow(0em 0em 20px rgba(255, 0, 0, 0));
+    animation:
+        optimize_animation 2s ease-out 2s normal forwards;
 }
-
-.brand__subtitle_optimize {
-    color: white;
-    filter: drop-shadow(0em 0em 10px var(--accent-lighter));
-    transition:
-        color 2s ease-out 2s,
-        filter 2s ease-out 2s;
+@keyframes optimize_animation {
+    100% {
+        color: white;
+        filter: drop-shadow(0em 0em 10px var(--accent-lighter));
+    }
 }
 
 .brand__description {
