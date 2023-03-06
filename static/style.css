@@ -99,8 +99,8 @@ a:active {
 .brand__title {
     margin: 0px;
     filter: drop-shadow(5px 2px #333);
-    font-size: 4.6rem;
-    line-height: 3.6rem;
+    font-size: 6rem;
+    line-height: 4.5rem;
 }
 
 .brand__title_pixel.initial_state {
@@ -121,12 +121,13 @@ a:active {
     color: rgba(255, 255, 255, 1);
     opacity: 0;
     filter: blur(6px);
-    letter-spacing: 4vw;
+    letter-spacing: 1vw;
 }
 
 .brand__title_reducer {
     color: var(--accent-lighter);
     opacity: 1;
+    letter-spacing: -0.2rem;
     transition:
         filter 2s linear 1s,
         letter-spacing 3s cubic-bezier(0.23, 1, 0.320, 1) 0s,
