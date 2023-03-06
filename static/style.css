@@ -211,9 +211,11 @@ a:active {
     grid-template-columns: repeat(auto-fit, minmax(var(--card-size), 1fr));
     justify-items: center;
     padding: 44px 54px;
+    /*
     box-shadow: 0px 20px 20px 20px rgb(0 0 0 / 18%);
     border-radius: 23px;
     background-color: #ffffff05;
+    */
 }
 
 .card_image {
