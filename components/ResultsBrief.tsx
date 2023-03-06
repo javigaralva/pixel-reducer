@@ -10,6 +10,10 @@ export function ResultsBrief() {
         isLoading: isLoadingDownloadSelected,
         startDownloadZip: startDownloadSelected,
     } = useDownloadOptimizedImagesAsZip()
+    const {
+        isLoading: isLoadingDownloadAll,
+        startDownloadZip: startDownloadAll,
+    } = useDownloadOptimizedImagesAsZip()
 
     const response = appState.optimizedImagesResponse.value
     if (!response) {
@@ -30,12 +34,16 @@ export function ResultsBrief() {
         ? totalBytesSelectedSaved * 100 / originalSizeSelected
         : 0
 
+    const hasAllImagesAlreadyOptimized = totalImagesFound > 0 && response.imagesOptimized.length === 0
+    const hasImagesOptimized = totalImagesFound > 0 && response.imagesOptimized.length > 0
+
     const handleDownloadSelected = () => {
         startDownloadSelected(appState.imagesProcessedSelected.value)
     }
 
-    const hasAllImagesAlreadyOptimized = totalImagesFound > 0 && response.imagesOptimized.length === 0
-    const hasImagesOptimized = totalImagesFound > 0 && response.imagesOptimized.length > 0
+    const handleDownloadAll = () => {
+        startDownloadAll(appState.optimizedImagesResponse.value?.imagesOptimized)
+    }
 
     return (
         <section className='results__brief'>
@@ -129,9 +137,15 @@ export function ResultsBrief() {
                         </div>
                         {hasImagesOptimized && (
                             <>
-                                <button className='card_image__stats_saved downloadable' onClick={() => {}}>
+                                <button
+                                    className='card_image__stats_saved downloadable'
+                                    onClick={handleDownloadAll}
+                                    disabled={isLoadingDownloadAll}
+                                >
                                     <div className='card_image__stats_saved_text'>
-                                        <span className=''>Download all</span>
+                                        <span className=''>
+                                            {isLoadingDownloadAll ? 'Downloading...' : 'Download all'}
+                                        </span>
                                         <span className='card_image__stats_saved_percentage'>
                                             {response.totalPercentageSaved.toFixed(2)}%
                                         </span>
@@ -150,22 +164,20 @@ export function ResultsBrief() {
                                             onClick={handleDownloadSelected}
                                             disabled={totalImagesSelected === 0 || isLoadingDownloadSelected}
                                         >
-                                            {isLoadingDownloadSelected ? 'Downloading...' : (
-                                                <>
-                                                    <div className='card_image__stats_saved_text'>
-                                                        <span className=''>Download selected</span>
-                                                        <span className='card_image__stats_saved_percentage'>
-                                                            {totalPercentageSelectedSaved.toFixed(2)}%
-                                                        </span>
-                                                        <span className='card_image__stats_saved_bytes'>
-                                                            {formatBytes(totalBytesSelectedSaved)} saved!
-                                                        </span>
-                                                    </div>
-                                                    <div className='card_image__stats_download_icon'>
-                                                        <DownloadIcon />
-                                                    </div>
-                                                </>
-                                            )}
+                                            <div className='card_image__stats_saved_text'>
+                                                <span className=''>
+                                                    {isLoadingDownloadSelected ? 'Downloading...' : 'Download selected'}
+                                                </span>
+                                                <span className='card_image__stats_saved_percentage'>
+                                                    {totalPercentageSelectedSaved.toFixed(2)}%
+                                                </span>
+                                                <span className='card_image__stats_saved_bytes'>
+                                                    {formatBytes(totalBytesSelectedSaved)} saved!
+                                                </span>
+                                            </div>
+                                            <div className='card_image__stats_download_icon'>
+                                                <DownloadIcon />
+                                            </div>
                                         </button>
                                     )}
                             </>
