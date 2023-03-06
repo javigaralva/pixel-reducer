@@ -13,7 +13,7 @@ export default function Home() {
                     href='https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&display=swap'
                     rel='stylesheet'
                 />
-                <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+                <link rel='icon' href='/favicon.svg' type='image/svg+xml' />
                 <link rel='stylesheet' href={asset('style.css')} />
                 <meta name='description' content='Pixel Reducer: Optimizes the size of images on a website' />
             </Head>
