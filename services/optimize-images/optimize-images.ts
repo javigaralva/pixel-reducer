@@ -45,7 +45,6 @@ async function getOptimizedImagesFrom(imagesUrls: string[]) {
 
         const optimizedImages = await getOptimizedImages(validParsedImages)
         return optimizedImages
-
     } catch (_ex) {
         return []
     }
