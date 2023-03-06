@@ -86,13 +86,6 @@ export function ResultsBrief() {
                                                 {formatBytes(response.totalBytesOptimized)}
                                             </span>
                                         </div>
-                                        {
-                                            /*                                     <p>
-                                        Download all optimizable here! : {formatBytes(response.totalBytesSaved)}
-                                        {' '}
-                                        ({response.totalPercentageSaved.toFixed(2)})%
-                                    </p> */
-                                        }
                                     </>
                                 )}
                         </div>
@@ -111,29 +104,14 @@ export function ResultsBrief() {
 
                             {totalImagesSelected > 0 &&
                                 (
-                                    <>
-                                        <div className='results__brief__comparison_size'>
-                                            <span>{formatBytes(originalSizeSelected)}</span>
-                                            &nbsp;→&nbsp;
-                                            <span className='results__brief__total_bytes_optimized'>
-                                                {formatBytes(optimizedSizeSelected)}
-                                            </span>
-                                        </div>
-                                        {
-                                            /* <button
-                                            onClick={handleDownloadSelected}
-                                            disabled={totalImagesSelected === 0 || isLoadingDownloadSelected}
-                                        >
-                                            {isLoadingDownloadSelected
-                                                ? 'Downloading...'
-                                                : `Download all selected images and save: ${
-                                                    formatBytes(totalBytesSelectedSaved)
-                                                } (${totalPercentageSelectedSaved.toFixed(2)})%`}
-                                        </button> */
-                                        }
-                                    </>
+                                    <div className='results__brief__comparison_size'>
+                                        <span>{formatBytes(originalSizeSelected)}</span>
+                                        &nbsp;→&nbsp;
+                                        <span className='results__brief__total_bytes_optimized'>
+                                            {formatBytes(optimizedSizeSelected)}
+                                        </span>
+                                    </div>
                                 )}
-                            {/* <p>Download all selected images and save: {formatBytes(totalBytesSelectedSaved)} ({totalPercentageSelectedSaved.toFixed(2)})%</p> */}
                         </div>
                         {hasImagesOptimized && (
                             <>
