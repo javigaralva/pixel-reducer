@@ -17,7 +17,6 @@ export function useOptimizeImages() {
                 setOptimizedImagesResponse(json)
             })
             .catch((_error) => {
-                setIsLoading(false)
                 setOptimizedImagesResponse(null)
             })
             .finally(() => {
