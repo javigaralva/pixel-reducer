@@ -4,7 +4,7 @@ import { InputUrlForm } from '../components/InputUrlForm.tsx'
 import { Loader } from '/components/Loader.tsx'
 import { OptimizedResults } from '/components/OptimizedResults.tsx'
 import { AppState } from '/context/AppContext.ts'
-import { DownloadIcon } from '/components/icons/DownloadIcon.tsx'
+import { UpIcon } from '/components/icons/UpIcon.tsx'
 
 function App() {
     const appState = useContext(AppState)
@@ -30,7 +30,7 @@ function App() {
         (
             <div className='App'>
                 <div className={`go_up ${hasToShowGoUp ? 'visible' : ''}`} onClick={handleGoUp}>
-                    <DownloadIcon />
+                    <UpIcon />
                 </div>
                 <header className='header'>
                     <Brand />

@@ -93,6 +93,9 @@ a:active {
     transition: all 0.5s;
     right: -150px;
     color: hsl(215deg 27% 12%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .go_up svg {
@@ -106,8 +109,7 @@ a:active {
 }
 
 .go_up.visible svg {
-    width: 75px;
-    height: 75px;
+    width: 63px;
 }
 
 .go_up.visible:hover {
