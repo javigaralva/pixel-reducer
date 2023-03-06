@@ -1,4 +1,5 @@
 import { asset, Head } from '$fresh/runtime.ts'
+import { AppState, createAppState } from '/context/AppContext.ts'
 import App from '/islands/App.tsx'
 
 export default function Home() {
@@ -15,7 +16,9 @@ export default function Home() {
                 <link rel='stylesheet' href={asset('style.css')} />
             </Head>
             <body>
-                <App />
+                <AppState.Provider value={createAppState()}>
+                    <App />
+                </AppState.Provider>
             </body>
         </>
     )

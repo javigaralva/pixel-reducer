@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'preact/hooks'
+import { useContext, useEffect, useState } from 'preact/hooks'
+import { AppState } from '../context/AppContext.ts'
 import { DownloadIcon } from '/components/icons/DownloadIcon.tsx'
 import { type ImageProcessed, type OptimizedImagesResponse } from '/types.d.ts'
 import { formatBytes } from '/utils/formatBytes.ts'
@@ -12,8 +13,7 @@ function App() {
     const [isFirstRender, setIsFirstRender] = useState(true)
     const [urlInput, setUrlInput] = useState('')
     const [isLoading, setIsLoading] = useState(false)
-    const [response, setResponse] = useState<OptimizedImagesResponse | null>(null)
-    const [imagesSelected, setImagesSelected] = useState<string[]>([])
+    const appState = useContext(AppState)
 
     useEffect(() => {
         setIsFirstRender(false)
@@ -26,11 +26,11 @@ function App() {
         fetch(url)
             .then((response) => response.json())
             .then((json: OptimizedImagesResponse) => {
-                setResponse(json)
+                appState.setOptimizedImagesResponse(json)
             })
             .catch((response) => {
                 setIsLoading(false)
-                setResponse(null)
+                appState.setOptimizedImagesResponse(null)
             })
             .finally(() => {
                 setIsLoading(false)
@@ -38,7 +38,7 @@ function App() {
     }
 
     const handleDownloadAll = () => {
-        const responseObj = response
+        const responseObj = appState.optimizedImagesResponse.value
         if (!responseObj?.imagesOptimized?.length) return
 
         setIsLoading(true)
@@ -66,13 +66,6 @@ function App() {
             })
     }
 
-    const handleCardSelection = (url: string) => {
-        setImagesSelected((prevState) => {
-            const isSelected = imagesSelected.includes(url)
-            return isSelected ? prevState.filter((_url) => _url !== url) : [...prevState, url]
-        })
-    }
-
     const isValidUrlInput = isValidUrl(urlInput)
     const initialStateClass = isFirstRender ? 'initial_state' : ''
 
@@ -94,67 +87,157 @@ function App() {
                             Download all images with one click. Commitment to quality with zero setup.
                         </p>
                     </section>
-                    <form
-                        className='form_input'
-                        onSubmit={(e) => {
-                            e.preventDefault()
-                            handleOptimizeImages()
-                        }}
-                    >
-                        <label className='form_input__label_input'>
-                            URL
-                            <input
-                                className='form_input__input'
-                                value={urlInput}
-                                type={'url'}
-                                pattern='https?://.+'
-                                disabled={isLoading}
-                                placeholder={'https://midu.dev'}
-                                required
-                                onInput={(e) => setUrlInput(e.currentTarget.value)}
-                            />
-                        </label>
-                        <div>
-                            <button onClick={handleOptimizeImages} disabled={isLoading || !isValidUrlInput}>
-                                Analyze!
-                            </button>
-                            {!isLoading &&
+                    {isLoading ? null : (
+                        <form
+                            className='form_input'
+                            onSubmit={(e) => {
+                                e.preventDefault()
+                                handleOptimizeImages()
+                            }}
+                        >
+                            <label className='form_input__label_input'>
+                                URL
+                                <input
+                                    className='form_input__input'
+                                    value={urlInput}
+                                    type={'url'}
+                                    pattern='https?://.+'
+                                    disabled={isLoading}
+                                    placeholder={'https://midu.dev'}
+                                    required
+                                    onInput={(e) => setUrlInput(e.currentTarget.value)}
+                                />
+                            </label>
+                            <div>
+                                <button disabled={isLoading || !isValidUrlInput}>
+                                    Analyze!
+                                </button>
+                                {
+                                    /*                             {!isLoading &&
                                 response &&
                                 response.imagesOptimized.length > 0 &&
                                 (
                                     <button onClick={handleDownloadAll} disabled={isLoading}>
                                         Download All and save {formatBytes(response.totalBytesSaved)}!
                                     </button>
-                                )}
-                        </div>
-                    </form>
+                                )} */
+                                }
+                            </div>
+                        </form>
+                    )}
                 </header>
-                {isLoading
-                    ? <div className='loader'></div>
-                    : ((response?.imagesOptimized.length ?? 0) > 0
-                        ? (
-                            <section className='results'>
-                                <div className='cards-image-container'>
-                                    {response?.imagesOptimized.map((entry) => (
-                                        <CardImage
-                                            entry={entry}
-                                            isSelected={imagesSelected.includes(entry.url)}
-                                            onSelection={() => handleCardSelection(entry.url)}
-                                        />
-                                    ))}
-                                </div>
-                                {/* <pre style={{ textAlign: 'initial' }}>{JSON.stringify(response, null, 2)}</pre> */}
-                            </section>
-                        )
-                        : null)}
+                {isLoading ? <div className='loader'></div> : <OptimizedResults />}
             </div>
         )
     )
 }
 
+function OptimizedResults() {
+    const appState = useContext(AppState)
+    const response = appState.optimizedImagesResponse.value
+
+    return (
+        <>
+            <ResultsBrief />
+            {(response?.imagesOptimized.length ?? 0) > 0
+                ? (
+                    <section className='results'>
+                        <section className='cards-image-container'>
+                            {response?.imagesOptimized.map((entry) => <CardImage entry={entry} />)}
+                        </section>
+                        {/* <pre style={{ textAlign: 'initial' }}>{JSON.stringify(response, null, 2)}</pre> */}
+                    </section>
+                )
+                : null}
+        </>
+    )
+}
+
+function ResultsBrief() {
+    const appState = useContext(AppState)
+    const response = appState.optimizedImagesResponse.value
+    if (!response) return null
+
+    const imagesSelected = appState.imagesSelected.value
+    const totalImagesSelected = imagesSelected.length
+
+    const imagesProcessedSelected = appState.imagesProcessedSelected.value
+
+    const originalSizeSelected = imagesProcessedSelected.reduce((acc, entry) => acc + entry.size, 0)
+    const optimizedSizeSelected = imagesProcessedSelected.reduce((acc, entry) => acc + entry.optimizedSize, 0)
+    const totalBytesSelectedSaved = originalSizeSelected - optimizedSizeSelected
+    const totalPercentageSelectedSaved = imagesProcessedSelected.length
+        ? totalBytesSelectedSaved * 100 / originalSizeSelected
+        : 0
+
+    const handleDownloadSelected = () => {
+        const imagesProcessedSelected = appState.imagesProcessedSelected.value
+        if (!imagesProcessedSelected.length) return
+
+        fetch(API_ZIP_URL, {
+            method: 'POST',
+            body: JSON.stringify({
+                urls: imagesProcessedSelected.map((entry: {
+                    url: string
+                    optimizedUrl: string
+                }) => entry.optimizedUrl),
+            }),
+        })
+            .then((response) => response.blob())
+            .then((blob) => {
+                const url = window.URL.createObjectURL(new Blob([blob], { type: 'application/zip' }))
+                const link = document.createElement('a')
+                link.href = url
+                link.setAttribute('download', 'file.zip')
+                document.body.appendChild(link)
+                link.click()
+                document.body.removeChild(link)
+            })
+            .finally(() => {
+                // setIsLoading(false)
+            })
+    }
+
+    return (
+        <section className='results__brief'>
+            <div className='results__brief__stats'>
+                <p>URL processed: {response.urlProcessed}</p>
+                <p>
+                    Found {response.imagesNotOptimized.length} images already optimized.{' '}
+                    {response.imagesNotOptimized.length > 0 ? 'Well done!' : null}
+                </p>
+                <p>Found {response.imagesOptimized.length} optimizable images:</p>
+                <div>
+                    <span>{formatBytes(response.totalBytes)}</span>
+                    &nbsp;→&nbsp;
+                    <span>{formatBytes(response.totalBytesOptimized)}</span>
+                </div>
+                <p>
+                    Download all optimizable images and save: {formatBytes(response.totalBytesSaved)}{' '}
+                    ({response.totalPercentageSaved.toFixed(2)})%
+                </p>
+            </div>
+            <div className='results__brief__user_selection'>
+                <p>Images selected: {totalImagesSelected}</p>
+                <div>
+                    <span>{formatBytes(originalSizeSelected)}</span>
+                    &nbsp;→&nbsp;
+                    <span>{formatBytes(optimizedSizeSelected)}</span>
+                </div>
+                <button onClick={handleDownloadSelected} disabled={totalImagesSelected === 0}>
+                    Download all selected images and save: {formatBytes(totalBytesSelectedSaved)}{' '}
+                    ({totalPercentageSelectedSaved.toFixed(2)})%
+                </button>
+                {/* <p>Download all selected images and save: {formatBytes(totalBytesSelectedSaved)} ({totalPercentageSelectedSaved.toFixed(2)})%</p> */}
+            </div>
+        </section>
+    )
+}
+
 function CardImage(
-    { entry, isSelected, onSelection }: { entry: ImageProcessed; isSelected: boolean; onSelection: () => void },
+    { entry }: { entry: ImageProcessed },
 ) {
+    const appState = useContext(AppState)
     const handleDownload = () => {
         fetch(entry.optimizedUrl).then((response) => {
             response.blob().then((blob) => {
@@ -169,10 +252,21 @@ function CardImage(
         })
     }
 
+    const handleCardSelection = () => {
+        appState.onCardSelection(entry.url)
+    }
+
+    const isSelected = appState.imagesSelected.value.includes(entry.url)
+
     return (
         <article className={`card_image ${isSelected ? 'selected' : ''}`} key={entry.url}>
             <header>
-                <img className='card_image__img' loading='lazy' onClick={onSelection} src={entry.thumbnailUrl} />
+                <img
+                    className='card_image__img'
+                    loading='lazy'
+                    onClick={handleCardSelection}
+                    src={entry.thumbnailUrl}
+                />
             </header>
             <footer>
                 <section className='card_image__file_info'>
