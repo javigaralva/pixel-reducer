@@ -80,6 +80,42 @@ a:active {
     text-decoration: underline;
 }
 
+.go_up {
+    opacity: 0;
+    cursor: pointer;
+    position: fixed;
+    bottom: 4rem;
+    z-index: 1;
+    background: var(--accent);
+    border-radius: 50%;
+    width: 75px;
+    height: 75px;
+    transition: all 0.5s;
+    right: -150px;
+    color: hsl(215deg 27% 12%);
+}
+
+.go_up svg {
+    width: 75px;
+    height: 75px;
+}
+
+.go_up.visible {
+    opacity: 1;
+    right: 4%;
+}
+
+.go_up.visible svg {
+    width: 75px;
+    height: 75px;
+}
+
+.go_up.visible:hover {
+    background: var(--accent-lighter);
+    box-shadow: 0px 0px 5px 5px var(--accent-lighter);
+}
+
+
 .App {
     max-width: 1200px;
     width: 80%;
