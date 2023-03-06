@@ -14,6 +14,7 @@ export default function Home() {
                     rel='stylesheet'
                 />
                 <link rel='stylesheet' href={asset('style.css')} />
+                <meta name="Pixel Reducer: Optimizes the size of images on a website" />
             </Head>
             <body>
                 <AppState.Provider value={createAppState()}>
