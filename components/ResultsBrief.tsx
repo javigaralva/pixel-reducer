@@ -2,6 +2,7 @@ import { useContext } from 'preact/hooks'
 import { AppState } from '../context/AppContext.ts'
 import { formatBytes } from '/utils/formatBytes.ts'
 import { useDownloadOptimizedImagesAsZip } from '/hooks/useDownloadOptimizedImagesAsZip.ts'
+import { DownloadIcon } from './icons/DownloadIcon.tsx'
 
 export function ResultsBrief() {
     const appState = useContext(AppState)
@@ -22,6 +23,8 @@ export function ResultsBrief() {
 
     const originalSizeSelected = imagesProcessedSelected.reduce((acc, entry) => acc + entry.size, 0)
     const optimizedSizeSelected = imagesProcessedSelected.reduce((acc, entry) => acc + entry.optimizedSize, 0)
+
+    const totalImagesFound = response.imagesNotOptimized.length + response.imagesOptimized.length
     const totalBytesSelectedSaved = originalSizeSelected - optimizedSizeSelected
     const totalPercentageSelectedSaved = imagesProcessedSelected.length
         ? totalBytesSelectedSaved * 100 / originalSizeSelected
@@ -31,45 +34,145 @@ export function ResultsBrief() {
         startDownloadSelected(appState.imagesProcessedSelected.value)
     }
 
+    const hasAllImagesAlreadyOptimized = totalImagesFound > 0 && response.imagesOptimized.length === 0
+    const hasImagesOptimized = totalImagesFound > 0 && response.imagesOptimized.length > 0
+
     return (
         <section className='results__brief'>
-            <div className='results__brief__stats'>
-                <p>URL processed: {response.urlProcessed}</p>
-                <p>Description: {response.urlDescription}</p>
-                <p>
-                    Found {response.imagesNotOptimized.length} images already optimized.{' '}
-                    {response.imagesNotOptimized.length > 0 ? 'Well done!' : null}
-                </p>
-                <p>Found {response.imagesOptimized.length} optimizable images:</p>
-                <div>
-                    <span>{formatBytes(response.totalBytes)}</span>
-                    &nbsp;→&nbsp;
-                    <span>{formatBytes(response.totalBytesOptimized)}</span>
-                </div>
-                <p>
-                    Download all optimizable images and save: {formatBytes(response.totalBytesSaved)}{' '}
-                    ({response.totalPercentageSaved.toFixed(2)})%
-                </p>
-            </div>
-            <div className='results__brief__user_selection'>
-                <p>Images selected: {totalImagesSelected}</p>
-                <div>
-                    <span>{formatBytes(originalSizeSelected)}</span>
-                    &nbsp;→&nbsp;
-                    <span>{formatBytes(optimizedSizeSelected)}</span>
-                </div>
-                <button
-                    onClick={handleDownloadSelected}
-                    disabled={totalImagesSelected === 0 || isLoadingDownloadSelected}
-                >
-                    {isLoadingDownloadSelected
-                        ? 'Downloading...'
-                        : `Download all selected images and save: ${formatBytes(totalBytesSelectedSaved)} (${
-                            totalPercentageSelectedSaved.toFixed(2)
-                        })%`}
-                </button>
-                {/* <p>Download all selected images and save: {formatBytes(totalBytesSelectedSaved)} ({totalPercentageSelectedSaved.toFixed(2)})%</p> */}
-            </div>
+            <header className='results__brief__header'>
+                <p className='results__brief__url ellipsis'>{response.urlProcessed}</p>
+                <p className='results__brief__description'>{response.urlDescription}</p>
+                {totalImagesFound === 0 &&
+                    <p className='results__brief__no_images_found'>No images found.</p>}
+                {hasAllImagesAlreadyOptimized &&
+                    (
+                        <p className='results__brief__no_images_found'>
+                            Found {totalImagesFound} images{' '}
+                            <span className='results__brief__already_optimized'>already optimized</span>. Well done!
+                        </p>
+                    )}
+            </header>
+            <section className='results__brief__stats'>
+                {hasImagesOptimized && (
+                    <>
+                        <div className='results_brief_total_stats'>
+                            <p className='results__brief__total_stats_header'>
+                                Found {totalImagesFound} images
+                            </p>
+                            {response.imagesNotOptimized.length > 0 &&
+                                (
+                                    <p className='results__brief__total_stats_optimized'>
+                                        {response.imagesNotOptimized.length} images are already optimized. Well done!
+                                    </p>
+                                )}
+                            {response.imagesOptimized.length > 0 &&
+                                (
+                                    <>
+                                        <p className='results__brief__total_stats_not_optimized'>
+                                            Found {response.imagesOptimized.length} optimizable images:
+                                        </p>
+                                        <div className='results__brief__comparison_size'>
+                                            <span>{formatBytes(response.totalBytes)}</span>
+                                            &nbsp;→&nbsp;
+                                            <span className='results__brief__total_bytes_optimized'>
+                                                {formatBytes(response.totalBytesOptimized)}
+                                            </span>
+                                        </div>
+                                        {
+                                            /*                                     <p>
+                                        Download all optimizable here! : {formatBytes(response.totalBytesSaved)}
+                                        {' '}
+                                        ({response.totalPercentageSaved.toFixed(2)})%
+                                    </p> */
+                                        }
+                                    </>
+                                )}
+                        </div>
+
+                        <div className='results__brief__user_selection'>
+                            <p className='results__brief__total_stats_header'>
+                                {totalImagesSelected}/{response.imagesOptimized.length}{' '}
+                                image{totalImagesSelected === 1 ? '' : 's'} selected
+                            </p>
+                            {totalImagesSelected === 0 &&
+                                (
+                                    <p className='results__brief__total_stats_optimized'>
+                                        Click on the image to select the images you want to optimize.
+                                    </p>
+                                )}
+
+                            {totalImagesSelected > 0 &&
+                                (
+                                    <>
+                                        <div className='results__brief__comparison_size'>
+                                            <span>{formatBytes(originalSizeSelected)}</span>
+                                            &nbsp;→&nbsp;
+                                            <span className='results__brief__total_bytes_optimized'>
+                                                {formatBytes(optimizedSizeSelected)}
+                                            </span>
+                                        </div>
+                                        {
+                                            /* <button
+                                            onClick={handleDownloadSelected}
+                                            disabled={totalImagesSelected === 0 || isLoadingDownloadSelected}
+                                        >
+                                            {isLoadingDownloadSelected
+                                                ? 'Downloading...'
+                                                : `Download all selected images and save: ${
+                                                    formatBytes(totalBytesSelectedSaved)
+                                                } (${totalPercentageSelectedSaved.toFixed(2)})%`}
+                                        </button> */
+                                        }
+                                    </>
+                                )}
+                            {/* <p>Download all selected images and save: {formatBytes(totalBytesSelectedSaved)} ({totalPercentageSelectedSaved.toFixed(2)})%</p> */}
+                        </div>
+                        {hasImagesOptimized && (
+                            <>
+                                <button className='card_image__stats_saved downloadable' onClick={() => {}}>
+                                    <div className='card_image__stats_saved_text'>
+                                        <span className=''>Download all</span>
+                                        <span className='card_image__stats_saved_percentage'>
+                                            {response.totalPercentageSaved.toFixed(2)}%
+                                        </span>
+                                        <span className='card_image__stats_saved_bytes'>
+                                            {formatBytes(response.totalBytesSaved)} saved!
+                                        </span>
+                                    </div>
+                                    <div className='card_image__stats_download_icon'>
+                                        <DownloadIcon />
+                                    </div>
+                                </button>
+                                {totalImagesSelected > 0 &&
+                                    (
+                                        <button
+                                            className='card_image__stats_saved downloadable'
+                                            onClick={handleDownloadSelected}
+                                            disabled={totalImagesSelected === 0 || isLoadingDownloadSelected}
+                                        >
+                                            {isLoadingDownloadSelected ? 'Downloading...' : (
+                                                <>
+                                                    <div className='card_image__stats_saved_text'>
+                                                        <span className=''>Download selected</span>
+                                                        <span className='card_image__stats_saved_percentage'>
+                                                            {totalPercentageSelectedSaved.toFixed(2)}%
+                                                        </span>
+                                                        <span className='card_image__stats_saved_bytes'>
+                                                            {formatBytes(totalBytesSelectedSaved)} saved!
+                                                        </span>
+                                                    </div>
+                                                    <div className='card_image__stats_download_icon'>
+                                                        <DownloadIcon />
+                                                    </div>
+                                                </>
+                                            )}
+                                        </button>
+                                    )}
+                            </>
+                        )}
+                    </>
+                )}
+            </section>
         </section>
     )
 }
