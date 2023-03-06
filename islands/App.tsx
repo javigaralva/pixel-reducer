@@ -4,7 +4,6 @@ import { InputUrlForm } from '../components/InputUrlForm.tsx'
 import { Loader } from '/components/Loader.tsx'
 import { OptimizedResults } from '/components/OptimizedResults.tsx'
 import { AppState } from '/context/AppContext.ts'
-import { PixelReducerLogoIcon } from '/components/icons/PixelReducerLogoIcon.tsx'
 import { DownloadIcon } from '/components/icons/DownloadIcon.tsx'
 
 function App() {
