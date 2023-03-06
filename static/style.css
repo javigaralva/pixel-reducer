@@ -204,6 +204,10 @@ a:active {
     margin: 0 auto;
 }
 
+.results__brief {
+    display: flex;
+}
+
 .cards-image-container {
     padding: 0;
     display: grid;
