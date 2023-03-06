@@ -16,6 +16,7 @@ export interface ImageProcessed {
 
 export interface OptimizedImagesResponse {
     urlProcessed: string
+    urlDescription: string
     msProcessTime: number
     totalBytes: number
     totalBytesOptimized: number

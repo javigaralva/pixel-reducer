@@ -3,7 +3,7 @@ import { ImageContentType } from '../consts.ts'
 import { getFileNameInfoFrom } from './getFileNameInfoFrom.ts'
 
 type GetImagesSizeParams = {
-    imagesUrl: string[]
+    imagesUrls: string[]
 }
 
 export type ImageInfo = {
@@ -15,9 +15,9 @@ export type ImageInfo = {
     extension: string
 }
 
-export async function getImagesInfo({ imagesUrl }: GetImagesSizeParams): Promise<ImageInfo[]> {
+export async function getImagesInfo({ imagesUrls }: GetImagesSizeParams): Promise<ImageInfo[]> {
     const imagesSizes = await Promise.allSettled(
-        imagesUrl.map(async (url) => {
+        imagesUrls.map(async (url) => {
             const blob = await fetch(url).then((response) => response.blob())
             const info = getFileNameInfoFrom({
                 url,

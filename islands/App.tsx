@@ -202,6 +202,7 @@ function ResultsBrief() {
         <section className='results__brief'>
             <div className='results__brief__stats'>
                 <p>URL processed: {response.urlProcessed}</p>
+                <p>Description: {response.urlDescription}</p>
                 <p>
                     Found {response.imagesNotOptimized.length} images already optimized.{' '}
                     {response.imagesNotOptimized.length > 0 ? 'Well done!' : null}

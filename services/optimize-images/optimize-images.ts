@@ -3,13 +3,14 @@ import { type OptimizedImagesResponse } from '/types.d.ts'
 import { isFulfilled } from '/utils/isFulfilled.ts'
 import { CLOUDINARY_OPTIMIZED_URL, CLOUDINARY_THUMBNAIL_URL } from './consts.ts'
 import { getImagesInfo, type ImageInfo } from './helpers/getImagesInfo.ts'
-import { getImagesUrls } from './helpers/getImagesUrls.ts'
+import { getWebsiteInfo } from './helpers/getWebsiteInfo.ts'
 import { isOptimizableImage } from './helpers/isOptimizableImage.ts'
 
 export async function optimizeStaticImagesFrom({ url }: { url: string }): Promise<OptimizedImagesResponse> {
     const tInitProcess = Date.now()
 
-    const optimizedImages = await getOptimizedImagesFrom(url)
+    const { imagesUrls, description } = await getWebsiteInfo({ url })
+    const optimizedImages = await getOptimizedImagesFrom(imagesUrls)
 
     const imagesOptimized = optimizedImages.filter((data) => data.optimizedSize < data.size)
     const imagesNotOptimized = optimizedImages.filter((data) => data.optimizedSize > data.size)
@@ -25,6 +26,7 @@ export async function optimizeStaticImagesFrom({ url }: { url: string }): Promis
 
     return {
         urlProcessed: url,
+        urlDescription: description,
         msProcessTime,
         totalBytes,
         totalBytesOptimized,
@@ -35,15 +37,15 @@ export async function optimizeStaticImagesFrom({ url }: { url: string }): Promis
     }
 }
 
-async function getOptimizedImagesFrom(url: string) {
+async function getOptimizedImagesFrom(imagesUrls: string[]) {
     try {
-        const imagesUrl = await getImagesUrls({ url })
-        const imagesSizes = await getImagesInfo({ imagesUrl })
+        const imagesSizes = await getImagesInfo({ imagesUrls })
 
         const validParsedImages = imagesSizes.filter(isOptimizable)
 
         const optimizedImages = await getOptimizedImages(validParsedImages)
         return optimizedImages
+
     } catch (_ex) {
         return []
     }
