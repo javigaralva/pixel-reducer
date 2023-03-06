@@ -10,7 +10,7 @@
             "type": "node",
             "program": "${workspaceFolder}/dev.ts",
             "cwd": "${workspaceFolder}",
-            "runtimeExecutable": "C:\\Users\\Beesion\\.deno\\bin\\deno.EXE",
+            "runtimeExecutable": "deno.EXE",
             "runtimeArgs": [
                 "run",
                 "--inspect-wait",
