@@ -1,64 +1,36 @@
 import { useContext, useEffect, useState } from 'preact/hooks'
 import { AppState } from '../context/AppContext.ts'
+import { useOptimizeImages } from '/hooks/useOptimizeImages.ts'
 import { DownloadIcon } from '/components/icons/DownloadIcon.tsx'
-import { type ImageProcessed, type OptimizedImagesResponse } from '/types.d.ts'
+import { type ImageProcessed } from '/types.d.ts'
 import { formatBytes } from '/utils/formatBytes.ts'
 import { isValidUrl } from '/utils/isValidUrl.ts'
-
-const API_BASE_URL = ''
-const API_OPTIMIZE_URL = `${API_BASE_URL}/api/optimize`
-const API_ZIP_URL = `${API_BASE_URL}/api/zip`
+import { useDownloadOptimizedImagesAsZip } from '/hooks/useDownloadOptimizedImagesAsZip.ts'
+import { useDownloadOptimizedImage } from '/hooks/useDownloadOptimizedImage.ts'
 
 function App() {
-    const [urlInput, setUrlInput] = useState('')
-    const [isLoading, setIsLoading] = useState(false)
     const appState = useContext(AppState)
+    const [urlInput, setUrlInput] = useState('')
+    const {
+        isLoading: isLoadingDownloadAll,
+        startDownloadZip: startDownloadAll,
+    } = useDownloadOptimizedImagesAsZip()
+    const {
+        isLoading,
+        optimizedImagesResponse,
+        optimizeImagesFrom,
+    } = useOptimizeImages()
 
     const handleOptimizeImages = () => {
-        if (!urlInput) return
-        const url = `${API_OPTIMIZE_URL}/${encodeURIComponent(urlInput)}`
-        setIsLoading(true)
-        fetch(url)
-            .then((response) => response.json())
-            .then((json: OptimizedImagesResponse) => {
-                appState.setOptimizedImagesResponse(json)
-            })
-            .catch((response) => {
-                setIsLoading(false)
-                appState.setOptimizedImagesResponse(null)
-            })
-            .finally(() => {
-                setIsLoading(false)
-            })
+        optimizeImagesFrom(urlInput)
     }
 
-    const handleDownloadAll = () => {
-        const responseObj = appState.optimizedImagesResponse.value
-        if (!responseObj?.imagesOptimized?.length) return
+    useEffect(() => {
+        appState.setOptimizedImagesResponse(optimizedImagesResponse)
+    }, [optimizedImagesResponse])
 
-        setIsLoading(true)
-        fetch(API_ZIP_URL, {
-            method: 'POST',
-            body: JSON.stringify({
-                urls: responseObj.imagesOptimized.map((entry: {
-                    url: string
-                    optimizedUrl: string
-                }) => entry.optimizedUrl),
-            }),
-        })
-            .then((response) => response.blob())
-            .then((blob) => {
-                const url = window.URL.createObjectURL(new Blob([blob], { type: 'application/zip' }))
-                const link = document.createElement('a')
-                link.href = url
-                link.setAttribute('download', 'file.zip')
-                document.body.appendChild(link)
-                link.click()
-                document.body.removeChild(link)
-            })
-            .finally(() => {
-                setIsLoading(false)
-            })
+    const handleDownloadAll = () => {
+        startDownloadAll(appState.optimizedImagesResponse.value?.imagesOptimized)
     }
 
     const isValidUrlInput = isValidUrl(urlInput)
@@ -74,8 +46,7 @@ function App() {
                             <span className='brand__title_reducer'>Reducer</span>
                         </h1>
                         <h2 className='brand__subtitle'>
-                            <span className='brand__subtitle_optimize'>Optimizes</span>{' '}
-                            the size of images on a website.
+                            <span className='brand__subtitle_optimize'>Optimizes</span> the size of images on a website.
                         </h2>
                         <p className='brand__description'>
                             Download all images with one click. Commitment to quality with zero setup.
@@ -106,16 +77,12 @@ function App() {
                                 <button disabled={isLoading || !isValidUrlInput}>
                                     Analyze!
                                 </button>
-                                {
-                                    /*                             {!isLoading &&
-                                response &&
-                                response.imagesOptimized.length > 0 &&
-                                (
-                                    <button onClick={handleDownloadAll} disabled={isLoading}>
-                                        Download All and save {formatBytes(response.totalBytesSaved)}!
-                                    </button>
-                                )} */
-                                }
+                                {!isLoading &&
+                                    (
+                                        <button onClick={handleDownloadAll} disabled={isLoadingDownloadAll}>
+                                            {isLoadingDownloadAll ? 'Downloading...' : 'Download All!'}
+                                        </button>
+                                    )}
                             </div>
                         </form>
                     )}
@@ -149,6 +116,11 @@ function OptimizedResults() {
 
 function ResultsBrief() {
     const appState = useContext(AppState)
+    const {
+        isLoading: isLoadingDownloadSelected,
+        startDownloadZip: startDownloadSelected,
+    } = useDownloadOptimizedImagesAsZip()
+
     const response = appState.optimizedImagesResponse.value
     if (!response) return null
 
@@ -165,31 +137,7 @@ function ResultsBrief() {
         : 0
 
     const handleDownloadSelected = () => {
-        const imagesProcessedSelected = appState.imagesProcessedSelected.value
-        if (!imagesProcessedSelected.length) return
-
-        fetch(API_ZIP_URL, {
-            method: 'POST',
-            body: JSON.stringify({
-                urls: imagesProcessedSelected.map((entry: {
-                    url: string
-                    optimizedUrl: string
-                }) => entry.optimizedUrl),
-            }),
-        })
-            .then((response) => response.blob())
-            .then((blob) => {
-                const url = window.URL.createObjectURL(new Blob([blob], { type: 'application/zip' }))
-                const link = document.createElement('a')
-                link.href = url
-                link.setAttribute('download', 'file.zip')
-                document.body.appendChild(link)
-                link.click()
-                document.body.removeChild(link)
-            })
-            .finally(() => {
-                // setIsLoading(false)
-            })
+        startDownloadSelected(appState.imagesProcessedSelected.value)
     }
 
     return (
@@ -219,9 +167,15 @@ function ResultsBrief() {
                     &nbsp;→&nbsp;
                     <span>{formatBytes(optimizedSizeSelected)}</span>
                 </div>
-                <button onClick={handleDownloadSelected} disabled={totalImagesSelected === 0}>
-                    Download all selected images and save: {formatBytes(totalBytesSelectedSaved)}{' '}
-                    ({totalPercentageSelectedSaved.toFixed(2)})%
+                <button
+                    onClick={handleDownloadSelected}
+                    disabled={totalImagesSelected === 0 || isLoadingDownloadSelected}
+                >
+                    {isLoadingDownloadSelected
+                        ? 'Downloading...'
+                        : `Download all selected images and save: ${formatBytes(totalBytesSelectedSaved)} (${
+                            totalPercentageSelectedSaved.toFixed(2)
+                        })%`}
                 </button>
                 {/* <p>Download all selected images and save: {formatBytes(totalBytesSelectedSaved)} ({totalPercentageSelectedSaved.toFixed(2)})%</p> */}
             </div>
@@ -233,18 +187,10 @@ function CardImage(
     { entry }: { entry: ImageProcessed },
 ) {
     const appState = useContext(AppState)
+    const { startDownload } = useDownloadOptimizedImage()
+
     const handleDownload = () => {
-        fetch(entry.optimizedUrl).then((response) => {
-            response.blob().then((blob) => {
-                const url = window.URL.createObjectURL(new Blob([blob]))
-                const link = document.createElement('a')
-                link.href = url
-                link.setAttribute('download', entry.fileNameExt)
-                document.body.appendChild(link)
-                link.click()
-                document.body.removeChild(link)
-            })
-        })
+        startDownload(entry)
     }
 
     const handleCardSelection = () => {
