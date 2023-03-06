@@ -50,7 +50,7 @@ export function InputUrlForm({ onIsLoading }: { onIsLoading: (isLoading: boolean
             </label>
             <div>
                 <button disabled={isLoading || !isValidUrlInput}>
-                    Analyze!
+                    Optimize!
                 </button>
             </div>
         </form>
