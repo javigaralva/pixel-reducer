@@ -17,7 +17,6 @@ export function InputUrlForm({ onIsLoading }: { onIsLoading: (isLoading: boolean
     }, [optimizedImagesResponse])
 
     useEffect(() => {
-        console.log({ isLoading })
         onIsLoading(isLoading)
     }, [isLoading])
 
