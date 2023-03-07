@@ -136,7 +136,6 @@ a:active {
 
 .brand__title {
     margin: 0px;
-    filter: drop-shadow(5px 2px #333);
     font-size: 6rem;
     line-height: 4.5rem;
 }
@@ -260,7 +259,6 @@ a:active {
 .results__brief {
     display: flex;
     flex-direction: column;
-    /* margin-top: 2rem; */
     width: 80%;
     margin: 2rem auto 0 auto;
     border: 1px solid rgb(255 255 255 / 20%);
@@ -288,7 +286,6 @@ a:active {
 
 .results__brief__stats {
     display: grid;
-    /* margin: 0 auto; */
     gap: 1rem 2rem;
     grid-template-columns: 1fr 1fr;
     margin-top: 1em;
@@ -490,7 +487,6 @@ a:active {
 .card_image__stats_size {
     text-align: center;
     display: flex;
-    /* background-color: #181818; */
     border-radius: 111px;
     font-size: 1.2rem;
     justify-content: space-evenly;
@@ -500,8 +496,6 @@ a:active {
 
 .card_image__stats_saved {
     display: flex;
-    /* flex-direction: column; */
-    /* gap: 0.4rem; */
     background: #42ab0014;
     align-items: center;
     padding: 0.4rem;
@@ -513,7 +507,6 @@ a:active {
 .card_image__stats_saved_text {
     display: flex;
     flex-direction: column;
-    /* align-self: center; */
     width: 100%;
     align-items: center;
     margin-left: 1rem;
